@@ -2,7 +2,7 @@
 {
     partial class Server
     {
-        /// <summary>
+        /// <summary>///
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
@@ -32,6 +32,10 @@
             this.btnStart = new System.Windows.Forms.Button();
             this.rtbLog = new System.Windows.Forms.RichTextBox();
             this.lblLogTitle = new System.Windows.Forms.Label();
+            this.txtPort = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtIP = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblStatus
@@ -41,9 +45,8 @@
             this.lblStatus.Location = new System.Drawing.Point(16, 18);
             this.lblStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(143, 23);
+            this.lblStatus.Size = new System.Drawing.Size(0, 23);
             this.lblStatus.TabIndex = 0;
-            this.lblStatus.Text = "Status: Stopped";
             // 
             // btnStart
             // 
@@ -82,11 +85,56 @@
             this.lblLogTitle.TabIndex = 3;
             this.lblLogTitle.Text = "System Log:";
             // 
+            // txtPort
+            // 
+            this.txtPort.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPort.Location = new System.Drawing.Point(308, 19);
+            this.txtPort.Margin = new System.Windows.Forms.Padding(4);
+            this.txtPort.Name = "txtPort";
+            this.txtPort.Size = new System.Drawing.Size(132, 30);
+            this.txtPort.TabIndex = 12;
+            this.txtPort.Text = "8080";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(385, 27);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(34, 16);
+            this.label4.TabIndex = 11;
+            this.label4.Text = "Port:";
+            // 
+            // txtIP
+            // 
+            this.txtIP.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtIP.Location = new System.Drawing.Point(113, 19);
+            this.txtIP.Margin = new System.Windows.Forms.Padding(4);
+            this.txtIP.Name = "txtIP";
+            this.txtIP.Size = new System.Drawing.Size(132, 30);
+            this.txtIP.TabIndex = 10;
+            this.txtIP.Text = "127.0.0.1";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(78, 22);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(33, 22);
+            this.label3.TabIndex = 9;
+            this.label3.Text = "IP:";
+            // 
             // Server
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(779, 506);
+            this.Controls.Add(this.txtPort);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.txtIP);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.lblLogTitle);
             this.Controls.Add(this.rtbLog);
             this.Controls.Add(this.btnStart);
@@ -105,6 +153,10 @@
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.RichTextBox rtbLog;
         private System.Windows.Forms.Label lblLogTitle;
+        private System.Windows.Forms.TextBox txtPort;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox txtIP;
+        private System.Windows.Forms.Label label3;
     }
 }
 
