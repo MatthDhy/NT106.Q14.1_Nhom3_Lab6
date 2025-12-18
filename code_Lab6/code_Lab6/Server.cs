@@ -12,14 +12,13 @@ namespace code_Lab6
 {
     public partial class Server : Form
     {
-<<<<<<< HEAD
-=======
+
         TcpListener listener;
         bool running = false;
 
         Dictionary<int, MenuItem> menuMap = new Dictionary<int, MenuItem>();
         Dictionary<int, List<OrderItem>> ordersByTable = new Dictionary<int, List<OrderItem>>();
->>>>>>> 098dbd9aa4a6f7818e9b45f05f0c21643782687a
+        string path;
 
         public Server()
         {
@@ -32,18 +31,14 @@ namespace code_Lab6
             btnStart.Enabled = false;
             lblStatus.Text = "Status: Listening...";
 
-<<<<<<< HEAD
-=======
             LoadMenu();
             StartServer(5000);
         }
 
         void LoadMenu()
         {
-            string path = Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                "menu.txt"
-            );
+            path = Path.Combine(Application.StartupPath, @"..\..\code_Lab6\code_Lab6\menu.txt");
+            path = Path.GetFullPath(path);
 
             foreach (var line in File.ReadAllLines(path))
             {
@@ -201,7 +196,6 @@ namespace code_Lab6
             ordersByTable.Remove(table);
 
             return "TOTAL " + total;
->>>>>>> 098dbd9aa4a6f7818e9b45f05f0c21643782687a
         }
     }
 }
