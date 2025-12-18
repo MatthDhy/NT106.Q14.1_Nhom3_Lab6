@@ -16,5 +16,13 @@ namespace code_Lab6
         {
             InitializeComponent();
         }
+        private void BtnStart_Click(object sender, EventArgs e)
+        {
+            rtbLog.AppendText($"[{DateTime.Now}] Server is starting...\n");
+            btnStart.Enabled = false;
+            lblStatus.Text = "Status: Listening...";
+
+            // Code socket sẽ viết thêm ở đây sau
+        }
     }
 }
