@@ -43,7 +43,63 @@ namespace code_Lab6
 
         private void btnPlaceOrder_Click(object sender, EventArgs e)
         {
+            if (client == null || !client.Connected)
+            {
+                MessageBox.Show("Chưa kết nối đến Server!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
+            string tableID = "1"; 
+
+            if (dataGridView1.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Vui lòng chọn món ăn trong danh sách!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
+            var cellValue = selectedRow.Cells[0].Value;
+
+            if (cellValue == null)
+            {
+                MessageBox.Show("Dữ liệu món ăn không hợp lệ!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            string menuID = cellValue.ToString();
+            int quantity = (int)numericUpDown1.Value;
+
+            if (quantity <= 0)
+            {
+                MessageBox.Show("Số lượng phải lớn hơn 0!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                string message = $"ORDER {tableID} {menuID} {quantity}";
+
+                StreamWriter writer = new StreamWriter(client.GetStream());
+                writer.AutoFlush = true;
+                writer.WriteLine(message);
+
+                StreamReader reader = new StreamReader(client.GetStream());
+                string response = reader.ReadLine();
+
+                if (response != null && response.StartsWith("OK"))
+                {
+                    string totalItemPrice = response.Substring(3);
+                    MessageBox.Show($"Đặt món thành công!\nThành tiền món này: {totalItemPrice} VNĐ", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Đặt món thất bại. Server phản hồi: " + response, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi giao tiếp với Server: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
