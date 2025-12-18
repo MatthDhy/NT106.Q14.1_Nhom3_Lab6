@@ -32,12 +32,12 @@ namespace code_Lab6
             lblStatus.Text = "Status: Listening...";
 
             LoadMenu();
-            StartServer(5000);
+            StartServer(8080);
         }
 
         void LoadMenu()
         {
-            path = Path.Combine(Application.StartupPath, @"..\..\code_Lab6\code_Lab6\menu.txt");
+            path = Path.Combine(Application.StartupPath, @"..\..\menu.txt");
             path = Path.GetFullPath(path);
 
             foreach (var line in File.ReadAllLines(path))

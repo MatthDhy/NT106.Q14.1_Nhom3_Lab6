@@ -30,12 +30,12 @@
         {
             this.btnConnect = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.btnPlaceOrder = new System.Windows.Forms.Button();
             this.colID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.btnPlaceOrder = new System.Windows.Forms.Button();
             this.txtPort = new System.Windows.Forms.TextBox();
             this.txtIP = new System.Windows.Forms.TextBox();
             this.lblPort = new System.Windows.Forms.Label();
@@ -69,23 +69,6 @@
             this.dataGridView1.Size = new System.Drawing.Size(611, 308);
             this.dataGridView1.TabIndex = 1;
             // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Location = new System.Drawing.Point(608, 393);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(98, 22);
-            this.numericUpDown1.TabIndex = 2;
-            // 
-            // btnPlaceOrder
-            // 
-            this.btnPlaceOrder.Location = new System.Drawing.Point(465, 381);
-            this.btnPlaceOrder.Name = "btnPlaceOrder";
-            this.btnPlaceOrder.Size = new System.Drawing.Size(122, 45);
-            this.btnPlaceOrder.TabIndex = 3;
-            this.btnPlaceOrder.Text = "Place Order";
-            this.btnPlaceOrder.UseVisualStyleBackColor = true;
-            this.btnPlaceOrder.Click += new System.EventHandler(this.btnPlaceOrder_Click);
-            // 
             // colID
             // 
             this.colID.HeaderText = "ID";
@@ -114,12 +97,30 @@
             this.colNum.Name = "colNum";
             this.colNum.Width = 125;
             // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(608, 393);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(98, 22);
+            this.numericUpDown1.TabIndex = 2;
+            // 
+            // btnPlaceOrder
+            // 
+            this.btnPlaceOrder.Location = new System.Drawing.Point(465, 381);
+            this.btnPlaceOrder.Name = "btnPlaceOrder";
+            this.btnPlaceOrder.Size = new System.Drawing.Size(122, 45);
+            this.btnPlaceOrder.TabIndex = 3;
+            this.btnPlaceOrder.Text = "Place Order";
+            this.btnPlaceOrder.UseVisualStyleBackColor = true;
+            this.btnPlaceOrder.Click += new System.EventHandler(this.btnPlaceOrder_Click);
+            // 
             // txtPort
             // 
             this.txtPort.Location = new System.Drawing.Point(108, 10);
             this.txtPort.Name = "txtPort";
             this.txtPort.Size = new System.Drawing.Size(100, 22);
             this.txtPort.TabIndex = 4;
+            this.txtPort.Text = "127.0.0.1";
             // 
             // txtIP
             // 
@@ -127,6 +128,7 @@
             this.txtIP.Name = "txtIP";
             this.txtIP.Size = new System.Drawing.Size(100, 22);
             this.txtIP.TabIndex = 5;
+            this.txtIP.Text = "8080";
             // 
             // lblPort
             // 
