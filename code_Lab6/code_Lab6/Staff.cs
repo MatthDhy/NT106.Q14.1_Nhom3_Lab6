@@ -19,6 +19,46 @@ namespace code_Lab6
         public Staff()
         {
             InitializeComponent();
+            // Đăng ký sự kiện khi nhập số bàn sẽ tự động tính lại tiền
+            txtTableID.TextChanged += TxtTableID_TextChanged;
+        }
+
+        // Sự kiện khi thay đổi số bàn -> Tính lại tiền hiển thị
+        private void TxtTableID_TextChanged(object sender, EventArgs e)
+        {
+            CalculateLocalTotal();
+        }
+
+        // Hàm tính tổng tiền "Tạm tính" dựa trên dữ liệu đang có trên lưới
+        private void CalculateLocalTotal()
+        {
+            string currentTableID = txtTableID.Text.Trim();
+            long total = 0;
+
+            if (string.IsNullOrEmpty(currentTableID))
+            {
+                lblTotal.Text = "0 VNĐ";
+                return;
+            }
+
+            // Duyệt qua toàn bộ lưới để cộng tiền các món thuộc bàn này
+            foreach (DataGridViewRow row in dgvOrders.Rows)
+            {
+                // Kiểm tra null để tránh lỗi
+                var cellTable = row.Cells["TableID"].Value;
+                var cellPrice = row.Cells["TotalPrice"].Value;
+
+                if (cellTable != null && cellTable.ToString() == currentTableID)
+                {
+                    long price;
+                    if (cellPrice != null && long.TryParse(cellPrice.ToString(), out price))
+                    {
+                        total += price;
+                    }
+                }
+            }
+
+            lblTotal.Text = $"{total:N0} VNĐ"; // Định dạng số có dấu phẩy (VD: 50,000 VNĐ)
         }
 
         // 1. Kết nối Server
@@ -45,10 +85,8 @@ namespace code_Lab6
                 txtIP.ReadOnly = true;
                 txtPort.ReadOnly = true;
 
-                // Gửi định danh (Protocol)
                 SendMessage("AUTH STAFF");
 
-                // Bắt đầu luồng nhận tin
                 receiveThread = new Thread(ReceiveData);
                 receiveThread.IsBackground = true;
                 receiveThread.Start();
@@ -59,7 +97,6 @@ namespace code_Lab6
             }
         }
 
-        // 2. Gửi lệnh đi (Common function)
         private void SendMessage(string message)
         {
             if (isConnected && client != null && client.Connected)
@@ -73,13 +110,8 @@ namespace code_Lab6
                     MessageBox.Show("Lỗi gửi dữ liệu: " + ex.Message);
                 }
             }
-            else
-            {
-                MessageBox.Show("Chưa kết nối đến Server!");
-            }
         }
 
-        // 3. Luồng nhận dữ liệu
         private void ReceiveData()
         {
             try
@@ -88,14 +120,12 @@ namespace code_Lab6
                 {
                     string message = reader.ReadLine();
                     if (message == null) break;
-
-                    // Đẩy về luồng UI để xử lý hiển thị
                     this.Invoke(new Action(() => ProcessServerMessage(message)));
                 }
             }
             catch
             {
-                if (isConnected) // Chỉ báo lỗi nếu đang trạng thái kết nối mà bị ngắt
+                if (isConnected)
                 {
                     isConnected = false;
                     Invoke(new Action(() => {
@@ -103,27 +133,20 @@ namespace code_Lab6
                         btnConnect.Enabled = true;
                         txtIP.ReadOnly = false;
                         txtPort.ReadOnly = false;
-                        MessageBox.Show("Đã mất kết nối với Server.");
                     }));
                 }
             }
         }
 
-        // 4. Xử lý logic phản hồi từ Server (QUAN TRỌNG)
+        // 4. Xử lý logic phản hồi
         private void ProcessServerMessage(string message)
         {
             if (string.IsNullOrWhiteSpace(message)) return;
 
-            // -- XỬ LÝ DANH SÁCH ORDER (GET_ORDERS) --
-            // Giả định Server trả về dạng: "TableID;DishName;Quantity;TotalPrice"
-            // Hoặc: "TableID,DishName,Quantity,TotalPrice"
-            // Ta kiểm tra nếu dòng tin nhắn có chứa các ký tự phân cách đặc trưng
+            // TH1: Nhận danh sách món (Get Orders)
             if (message.Contains(";") || message.Contains(","))
             {
-                // Tách chuỗi dựa trên cả dấu chấm phẩy và dấu phẩy
                 string[] parts = message.Split(new char[] { ';', ',' });
-
-                // Kiểm tra xem có đủ 4 cột dữ liệu không (Bàn, Món, SL, Tiền)
                 if (parts.Length >= 4)
                 {
                     string tableId = parts[0].Trim();
@@ -131,47 +154,41 @@ namespace code_Lab6
                     string quantity = parts[2].Trim();
                     string price = parts[3].Trim();
 
-                    // Thêm vào DataGridView
                     dgvOrders.Rows.Add(tableId, dishName, quantity, price);
+
+                    // Sau khi thêm món mới, gọi hàm tính lại tổng tiền ngay
+                    CalculateLocalTotal();
                 }
             }
-            // -- XỬ LÝ THANH TOÁN (PAY) --
-            // Nếu Server trả về một con số nguyên -> Tổng tiền thanh toán
+            // TH2: Nhận kết quả thanh toán từ Server (PAY)
             else if (IsNumeric(message))
             {
-                lblTotal.Text = message + " VNĐ";
-                MessageBox.Show($"Thanh toán thành công! Tổng tiền: {message} VNĐ");
+                // Server trả về số tiền chốt -> Cập nhật hiển thị và báo thành công
+                lblTotal.Text = $"{long.Parse(message):N0} VNĐ";
+                MessageBox.Show($"Thanh toán thành công! Tổng thực thu: {message} VNĐ");
 
-                // Xóa các món của bàn vừa thanh toán khỏi danh sách
+                // Xóa các món của bàn đã thanh toán khỏi lưới
                 string currentTable = txtTableID.Text.Trim();
                 RemoveOrdersFromGrid(currentTable);
-            }
-            // Các thông báo text khác (VD: "Server started", "Error", v.v.)
-            else
-            {
-                // Có thể hiển thị lên Log hoặc bỏ qua
-                // Console.WriteLine(message); 
+
+                // Reset lại hiển thị tiền về 0
+                CalculateLocalTotal();
             }
         }
 
-        // Helper kiểm tra số
         private bool IsNumeric(string value)
         {
             long n;
             return long.TryParse(value, out n);
         }
 
-        // 5. Nút Lấy danh sách Order (GET_ORDERS)
         private void btnGetOrders_Click(object sender, EventArgs e)
         {
-            // Xóa dữ liệu cũ trên Grid để nhận dữ liệu mới
             dgvOrders.Rows.Clear();
-
-            // Gửi lệnh yêu cầu Server gửi danh sách
+            lblTotal.Text = "0 VNĐ"; // Reset tiền về 0 trước khi tải mới
             SendMessage("GET_ORDERS");
         }
 
-        // 6. Nút Tính tiền (PAY)
         private void btnCharge_Click(object sender, EventArgs e)
         {
             string tableID = txtTableID.Text.Trim();
@@ -181,10 +198,7 @@ namespace code_Lab6
                 return;
             }
 
-            // Xuất file hóa đơn trước (Client tự xử lý)
             ExportBillToFile(tableID);
-
-            // Gửi lệnh lên Server để tính toán và xóa đơn
             SendMessage($"PAY {tableID}");
         }
 
@@ -204,7 +218,8 @@ namespace code_Lab6
 
                     foreach (DataGridViewRow row in dgvOrders.Rows)
                     {
-                        if (row.Cells["TableID"].Value?.ToString() == tableID)
+                        var cellTable = row.Cells["TableID"].Value;
+                        if (cellTable != null && cellTable.ToString() == tableID)
                         {
                             string dish = row.Cells["DishName"].Value?.ToString() ?? "";
                             string qty = row.Cells["Quantity"].Value?.ToString() ?? "0";
@@ -217,7 +232,7 @@ namespace code_Lab6
                         }
                     }
                     sw.WriteLine("----------------------------------------------------------");
-                    sw.WriteLine($"Tổng tiền (Tạm tính): {clientTotal} VNĐ");
+                    sw.WriteLine($"Tổng tiền: {clientTotal:N0} VNĐ");
                 }
                 MessageBox.Show($"Đã xuất hóa đơn: {fileName}");
             }
@@ -231,7 +246,8 @@ namespace code_Lab6
         {
             for (int i = dgvOrders.Rows.Count - 1; i >= 0; i--)
             {
-                if (dgvOrders.Rows[i].Cells["TableID"].Value?.ToString() == tableID)
+                var cellTable = dgvOrders.Rows[i].Cells["TableID"].Value;
+                if (cellTable != null && cellTable.ToString() == tableID)
                 {
                     dgvOrders.Rows.RemoveAt(i);
                 }
