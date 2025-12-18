@@ -97,12 +97,7 @@ namespace code_Lab6
             {
                 if (isConnected) MessageBox.Show("Mất kết nối với Server.");
                 isConnected = false;
-                Invoke(new Action(() => {
-                    lblStatus.Text = "Trạng thái: Mất kết nối";
-                    btnConnect.Enabled = true;
-                    txtIP.ReadOnly = false;
-                    txtPort.ReadOnly = false;
-                }));
+                
             }
         }
 

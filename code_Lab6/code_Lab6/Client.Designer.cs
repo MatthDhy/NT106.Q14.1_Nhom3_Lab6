@@ -124,23 +124,6 @@
             this.label4.TabIndex = 4;
             this.label4.Text = "Port:";
             // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Location = new System.Drawing.Point(608, 393);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(98, 22);
-            this.numericUpDown1.TabIndex = 2;
-            // 
-            // btnPlaceOrder
-            // 
-            this.btnPlaceOrder.Location = new System.Drawing.Point(465, 381);
-            this.btnPlaceOrder.Name = "btnPlaceOrder";
-            this.btnPlaceOrder.Size = new System.Drawing.Size(122, 45);
-            this.btnPlaceOrder.TabIndex = 3;
-            this.btnPlaceOrder.Text = "Place Order";
-            this.btnPlaceOrder.UseVisualStyleBackColor = true;
-            this.btnPlaceOrder.Click += new System.EventHandler(this.btnPlaceOrder_Click);
-            // 
             // txtPort
             // 
             this.txtPort.Location = new System.Drawing.Point(185, 12);
