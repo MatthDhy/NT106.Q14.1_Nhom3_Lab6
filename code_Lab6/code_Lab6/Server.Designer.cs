@@ -1,6 +1,6 @@
 ﻿namespace code_Lab6
 {
-    partial class Form1
+    partial class Server
     {
         /// <summary>
         /// Required designer variable.
