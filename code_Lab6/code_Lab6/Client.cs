@@ -55,6 +55,7 @@ namespace code_Lab6
 
                 // Tự động yêu cầu Menu ngay khi kết nối
                 SendMessage("MENU");
+                btnConnect.Enabled = false;
             }
             catch (Exception ex)
             {

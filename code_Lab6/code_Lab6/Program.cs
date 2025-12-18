@@ -16,7 +16,7 @@ namespace code_Lab6
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Server());
+            Application.Run(new Start());
         }
     }
 }
